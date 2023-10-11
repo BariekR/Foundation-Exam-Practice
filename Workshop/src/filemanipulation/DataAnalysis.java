@@ -12,6 +12,7 @@ public class DataAnalysis {
         try {
             System.out.println(mostProfitableYear("east"));
             System.out.println(topProducts("west", 2));
+            System.out.println(monthlyRevenue("central", 2021));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -71,6 +72,23 @@ public class DataAnalysis {
         }
 
         return output;
+    }
+
+    public static Map<String, Integer> monthlyRevenue(String regionName, int year) throws FileNotFoundException {
+        Map<String, Integer> monthsToRevenues = new HashMap<>();
+        List<Sale> sales = getSales(regionName);
+
+        for (Sale sale : sales) {
+            if (sale.getYear() == year) {
+                if (!monthsToRevenues.containsKey(sale.getMonth())) {
+                    monthsToRevenues.put(sale.getMonth(), sale.getRevenue());
+                } else {
+                    monthsToRevenues.put(sale.getMonth(), monthsToRevenues.get(sale.getMonth()) + sale.getRevenue());
+                }
+            }
+        }
+
+        return monthsToRevenues;
     }
 
     private static List<Sale> getSales(String regionName) throws FileNotFoundException {
